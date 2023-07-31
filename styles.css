@@ -8,7 +8,8 @@ body {
   }
   
   h1 {
-    margin-bottom: 20px;
+    margin-bottom: 14px;
+      margin-top: 0px;
   }
   
   .circle-table {
@@ -50,13 +51,20 @@ body {
     background-color: #222;
     color: #fff;
     border: none;
-    border-radius: 4px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
+    border-radius: 100px;
+    text-decoration: none;
+    max-height: 40px;
+    padding: 5px 12px;
+    min-width: 48px;
+    text-transform: capitalize;
+    margin-left: 25px;
   }
   
   button:hover {
-    background-color: #1e8449;
+    background-color: #F4A7BC;
+    color: #222;
   }
   
   .flex-container {
@@ -66,4 +74,7 @@ body {
 .blocks-wrapper {
     display: flex;
     gap: 100px; /* Adjust the value as needed to control the space */
+}
+#nameTable {
+    margin-top: 20px;
 }
