@@ -23,14 +23,14 @@ body {
     position: absolute;
     width: 60px;
     height: 60px;
-    background-color: #3498db;
+    background-color: #222;
     color: #fff;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 13px;
     cursor: pointer;
     transition: left 1s, top 1s;
   }
@@ -39,7 +39,7 @@ body {
     margin-top: 50px;
     padding: 10px 20px;
     margin-left: 50px;
-    background-color: #27ae60;
+    background-color: #222;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -47,7 +47,7 @@ body {
     font-size: 16px;
   }
   .add-name-button {
-    background-color: #27ae60;
+    background-color: #222;
     color: #fff;
     border: none;
     border-radius: 4px;
