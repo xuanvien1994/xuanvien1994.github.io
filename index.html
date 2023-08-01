@@ -1,46 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>U-N00000</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
 
-<body>
-    <img src="https://www.spce.com/wp-content/uploads/2021/04/SPCE-Logotype_Black-200x99.png.webp" style="margin: 50px;" />
+  <body>
+    <img
+      src="https://www.spce.com/wp-content/uploads/2021/04/SPCE-Logotype_Black-200x99.png.webp"
+      style="margin: 50px"
+    />
     <div class="blocks-wrapper">
-        <!-- Circle Block -->
-        <div class="circle-block">
-            <div class="circle-table" id="circleTable">
-                <!-- This div will be populated dynamically using JavaScript -->
-            </div>
-            <label class="rate-number-checkbox"><input type="checkbox" onchange="toggleRateNumber(event);" >Include Rate number</label>
-            <button class="main-button" onclick="arrangeRandomly()">Randomize Positions</button>
+      <!-- Circle Block -->
+      <div class="circle-block">
+        <div class="circle-table" id="circleTable">
+          <!-- This div will be populated dynamically using JavaScript -->
         </div>
+        <label class="rate-number-checkbox"
+          ><input type="checkbox" onchange="toggleRateNumber(event);" />Include
+          Rate number</label
+        >
+        <button class="main-button" onclick="arrangeRandomly()">
+          Randomize Positions
+        </button>
+      </div>
 
-        <!-- Table Block -->
-        <div class="table-block">
-            <h1>Data Table</h1>
-            <input type="text" id="newName" placeholder="Enter a new name" onkeydown="addNameOnEnter(event)">
-            <button class="add-name-button" onclick="addName()">Add Name</button>
+      <!-- Table Block -->
+      <div class="table-block">
+        <h1>Data Table</h1>
+        <input
+          type="text"
+          id="newName"
+          placeholder="Enter a new name"
+          onkeydown="addNameOnEnter(event)"
+        />
+        <button class="add-name-button" onclick="addName()">Add Name</button>
 
-            <table id="nameTable">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Names will be added here dynamically -->
-                </tbody>
-            </table>
-        </div>
+        <table id="nameTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Names will be added here dynamically -->
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <script src="script.js"></script>
-</body>
-
+  </body>
 </html>

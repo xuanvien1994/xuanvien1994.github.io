@@ -23,6 +23,10 @@ function toggleRateNumber(event) {
   renderNameTable();
 }
 
+const sound = new Audio("./bgm.mp3");
+sound.msAudioCategory = "SoundEffect";
+sound.load(); //For pre-loading media
+
 document.addEventListener("DOMContentLoaded", () => {
   renderNameTable();
 });
@@ -101,8 +105,15 @@ function removeName(name) {
 }
 
 function arrangeRandomly() {
-  shuffleArray(names);
-  renderNameTable();
+  sound.play();
+  const interval = setInterval(() => {
+    shuffleArray(names);
+    renderNameTable();
+  }, 850);
+  setTimeout(() => {
+    clearInterval(interval);
+    sound.pause();
+  }, 8500);
 }
 
 function randomNumber(min, max) {
