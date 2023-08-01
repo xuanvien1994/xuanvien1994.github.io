@@ -14,8 +14,12 @@ const names = [
 
 let includeRateNumber = false;
 
+function clearRateNumber() {
+  names.forEach((x) => (x.rate = 0));
+}
 function toggleRateNumber(event) {
   includeRateNumber = event.target.checked;
+  clearRateNumber();
   renderNameTable();
 }
 
@@ -112,7 +116,7 @@ function shuffleArray(array) {
   }
   if (includeRateNumber) {
     const usedNumbers = [];
-    for (let i = array.length - 1; i > 0; i--) {
+    for (let i = 0; i < array.length; i++) {
       let rate = randomNumber(1, 100);
       while (usedNumbers.includes(rate)) {
         rate = randomNumber(1, 100);
