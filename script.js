@@ -35,7 +35,7 @@ function renderNameTable() {
   for (let i = 0; i < names.length; i++) {
     const { name, rate } = names[i];
     let className = "person";
-    if (maxRate === rate && maxRate !== 0) {
+    if (includeRateNumber && maxRate === rate && maxRate !== 0) {
       className += " rate-max";
     }
     const angle = i * angleIncrement;
