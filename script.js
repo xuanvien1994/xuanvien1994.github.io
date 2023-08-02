@@ -1,16 +1,31 @@
 const names = [
-  { name: "Vien", rate: 0 },
-  { name: "Toan", rate: 0 },
+  { name: "Viên", rate: 0 },
+  { name: "Toàn", rate: 0 },
   { name: "Quang", rate: 0 },
   { name: "Ánh", rate: 0 },
-  { name: "Chuong", rate: 0 },
-  { name: "Uyen", rate: 0 },
+  { name: "Chương", rate: 0 },
+  { name: "Uyên", rate: 0 },
   { name: "Long", rate: 0 },
-  { name: "Thuong", rate: 0 },
-  { name: "Tin", rate: 0 },
-  { name: "Hong", rate: 0 },
-  { name: "Minh", rate: 0 },
+  { name: "Thương", rate: 0 },
+  { name: "Tín", rate: 0 },
+  { name: "Hồng", rate: 0 },
+  // { name: "Minh", rate: 0 },
 ];
+
+var result = {
+  dealer: '',
+  speak: function () {
+     // Thứ tự ngồi: Long Thương Toàn Tín, người chia bài là Thương
+    // speak('Thứ tự ngồi: ' . names.join(', ') );
+    // convert names to list
+    //
+    if (this.dealer !== '') {
+      speak('Xin chúc mừng người chia bài là: ' + this.dealer );
+    }
+    speak('Thứ tự ngồi: ' + names.map(x => x.name).join(' '));
+    // speak('Thứ tự ngồi: Long Thương Toàn Tín, người chia bài là Thương');
+  }
+};
 
 let includeRateNumber = false;
 
@@ -45,6 +60,7 @@ function renderNameTable() {
     let className = "person";
     if (includeRateNumber && maxRate === rate && maxRate !== 0) {
       className += " rate-max";
+      result.dealer = name;
     }
     const angle = i * angleIncrement;
     const x = centerX + radius * Math.cos(angle);
@@ -113,7 +129,8 @@ function arrangeRandomly() {
   setTimeout(() => {
     clearInterval(interval);
     sound.pause();
-  }, 8500);
+    result.speak();
+  }, 10000);
 }
 
 function randomNumber(min, max) {
@@ -142,4 +159,14 @@ function addNameOnEnter(event) {
   if (event.key === "Enter") {
     addName();
   }
+}
+
+function speak(text) {
+	var msg = new SpeechSynthesisUtterance();
+	msg.text = text;
+	msg.volume = 1
+	msg.rate = 0.8;
+	msg.pitch = 1;
+	msg.voice = speechSynthesis.getVoices().filter(function(voice) { return voice.name == 'Linh'; })[0];
+	window.speechSynthesis.speak(msg);
 }
