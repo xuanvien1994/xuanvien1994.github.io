@@ -16,7 +16,7 @@ var result = {
   dealer: '',
   names: [],
   lockResult: function () {
-    this.names = names;
+    this.names = [...names];
   },
   speak: function () {
      // Thứ tự ngồi: Long Thương Toàn Tín, người chia bài là Thương
