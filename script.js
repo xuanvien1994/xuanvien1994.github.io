@@ -1,28 +1,50 @@
 const names = [
-  { name: "Viên", rate: 0 },
-  { name: "Toàn", rate: 0 },
-  { name: "Quang", rate: 0 },
-  { name: "Ánh", rate: 0 },
-  { name: "Chương", rate: 0 },
-  { name: "Uyên", rate: 0 },
-  { name: "Long", rate: 0 },
-  { name: "Thương", rate: 0 },
-  { name: "Tín", rate: 0 },
-  { name: "Hồng", rate: 0 },
+  { name: "Viên", rate: 0, attrs: ' (developer, tính toán, lạc quan như pi thủ)' },
+  { name: "Toàn", rate: 0, attrs: ' (trùm UNO, đại gia)' },
+  { name: "Quang", rate: 0, attrs: ' (developer, chơi cho vui, cống hiến)' },
+  { name: "Ánh", rate: 0, attrs: ' (designer, thánh cãi ngang)' },
+  { name: "Chương", rate: 0, attrs: ' (nói nhiều, thích đâm chọt)' },
+  { name: "Uyên", rate: 0, attrs: ' (tester, nhỏ nhất, ngáo ngơ)' },
+  { name: "Long", rate: 0, attrs: '' },
+  { name: "Thương", rate: 0, attrs: ' (developer, đẹp, vô hại)' },
+  { name: "Tín", rate: 0, attrs: ' (developer, ít nói, làm nhiều)' },
+  { name: "Hồng", rate: 0, attrs: ' (tester, thích ăn chay)' },
   // { name: "Minh", rate: 0 },
 ];
 
 var result = {
   dealer: '',
+  names: [],
+  lockResult: function () {
+    this.names = names;
+  },
   speak: function () {
      // Thứ tự ngồi: Long Thương Toàn Tín, người chia bài là Thương
     // speak('Thứ tự ngồi: ' . names.join(', ') );
     // convert names to list
     //
-    if (this.dealer !== '') {
-      speak('Xin chúc mừng người chia bài là: ' + this.dealer );
-    }
-    speak('Thứ tự ngồi: ' + names.map(x => x.name).join(' '));
+    // if (this.dealer !== '') {
+    //   speak('Xin chúc mừng người chia bài là: ' + this.dealer );
+    // }
+
+    // thứ tự chỗ ngồi game bài UNO là Long, Thương (developer, đẹp, vô hại), Uyên (tester, nhỏ nhất, ngáo ngơ), Quang (developer, chơi cho vui), Ánh (designer, thánh cãi ngang), Toàn (trùm UNO, đại gia), Viên (developer, tính toán, lạc quan như pi thủ). Cho 1 thông báo ngắn gọn vị trí chỗ ngồi 1 cách hài hước và hấp dẫn, dưới 100 chữ. Theo định dạng cố định như sau * <tên>: <mô tả hài hước>
+    const str = 'thứ tự chỗ ngồi game bài UNO là ' + this.names.map(x => x.name + x.attrs).join(', ') + '. Cho 1 thông báo ngắn gọn vị trí chỗ ngồi 1 cách hài hước và hấp dẫn, dưới 100 chữ. Theo định dạng cố định như sau * <tên>: <mô tả hài hước>';
+    // send post request to https://appdev.spce.com/api/ai-talk/ with payload {text: str}
+    return fetch('https://appdev.spce.com/api/ai-talk/', {
+      method: 'POST',
+      body: JSON.stringify({question: str}),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      const audio_link = data.audio_link;
+      const audio = new Audio(audio_link);
+      audio.play();
+      return true;
+    });
     // speak('Thứ tự ngồi: Long Thương Toàn Tín, người chia bài là Thương');
   }
 };
@@ -46,17 +68,17 @@ document.addEventListener("DOMContentLoaded", () => {
   renderNameTable();
 });
 
-function renderNameTable() {
+function renderNameTable(defaultNames = names) {
   circleTable.innerHTML = "";
 
   const radius = 120;
   const centerX = circleTable.clientWidth / 2;
   const centerY = circleTable.clientHeight / 2;
-  const angleIncrement = (2 * Math.PI) / names.length;
-  const maxRate = Math.max(...names.map((x) => x.rate));
+  const angleIncrement = (2 * Math.PI) / defaultNames.length;
+  const maxRate = Math.max(...defaultNames.map((x) => x.rate));
 
-  for (let i = 0; i < names.length; i++) {
-    const { name, rate } = names[i];
+  for (let i = 0; i < defaultNames.length; i++) {
+    const { name, rate } = defaultNames[i];
     let className = "person";
     if (includeRateNumber && maxRate === rate && maxRate !== 0) {
       className += " rate-max";
@@ -83,7 +105,7 @@ function renderNameTable() {
   const nameTableBody = document.querySelector("#nameTable tbody");
   nameTableBody.innerHTML = "";
 
-  names.forEach(({ name, rate }) => {
+  defaultNames.forEach(({ name, rate }) => {
     const row = document.createElement("tr");
     const nameCell = document.createElement("td");
     nameCell.textContent = name;
@@ -126,11 +148,13 @@ function arrangeRandomly() {
     shuffleArray(names);
     renderNameTable();
   }, 850);
-  setTimeout(() => {
+  setTimeout(async () => {
+    result.lockResult();
+    await Promise.any([sleep(30), result.speak()]);
     clearInterval(interval);
     sound.pause();
-    result.speak();
-  }, 10000);
+    renderNameTable(result.names);
+  }, 3000);
 }
 
 function randomNumber(min, max) {
@@ -169,4 +193,8 @@ function speak(text) {
 	msg.pitch = 1;
 	msg.voice = speechSynthesis.getVoices().filter(function(voice) { return voice.name == 'Linh'; })[0];
 	window.speechSynthesis.speak(msg);
+}
+
+function sleep(seconds) {
+  return new Promise(resolve => setTimeout(resolve, seconds * 1000));
 }
