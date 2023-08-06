@@ -19,39 +19,39 @@ var result = {
     this.names = [...names];
   },
   speak: async function () {
-     // Thứ tự ngồi: Long Thương Toàn Tín, người chia bài là Thương
     // speak('Thứ tự ngồi: ' . names.join(', ') );
     // convert names to list
     //
     // if (this.dealer !== '') {
     //   speak('Xin chúc mừng người chia bài là: ' + this.dealer );
     // }
+    try {
+      const str = 'thứ tự chỗ ngồi game bài UNO là ' + this.names.map(x => x.name + x.attrs).join(', ') + '. Cho 1 thông báo ngắn gọn vị trí chỗ ngồi 1 cách hài hước và hấp dẫn';
+      // send post request to https://appdev.spce.com/api/ai-talk/ with payload {text: str}
+      let resp = await fetch('https://appdev.spce.com/api/ai-talk/', {
+        method: 'POST',
+        body: JSON.stringify({question: str}),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        return {requestId: data?.request_id, audioLink: data?.audio_link};
+      });
 
-    // thứ tự chỗ ngồi game bài UNO là Long, Thương (developer, đẹp, vô hại), Uyên (tester, nhỏ nhất, ngáo ngơ), Quang (developer, chơi cho vui), Ánh (designer, thánh cãi ngang), Toàn (trùm UNO, đại gia), Viên (developer, tính toán, lạc quan như pi thủ). Cho 1 thông báo ngắn gọn vị trí chỗ ngồi 1 cách hài hước và hấp dẫn, dưới 100 chữ. Theo định dạng cố định như sau * <tên>: <mô tả hài hước>
-    const str = 'thứ tự chỗ ngồi game bài UNO là ' + this.names.map(x => x.name + x.attrs).join(', ') + '. Cho 1 thông báo ngắn gọn vị trí chỗ ngồi 1 cách hài hước và hấp dẫn';
-    // send post request to https://appdev.spce.com/api/ai-talk/ with payload {text: str}
-    let resp = await fetch('https://appdev.spce.com/api/ai-talk/', {
-      method: 'POST',
-      body: JSON.stringify({question: str}),
-      headers: {
-        'Content-Type': 'application/json'
+      if (!resp.audioLink && resp.requestId) {
+        resp.audioLink = await get_audio_link(resp.requestId);
       }
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      return {requestId: data?.request_id, audioLink: data?.audio_link};
-    });
-
-    if (!resp.audioLink && resp.requestId) {
-      resp.audioLink = await get_audio_link(resp.requestId);
+      
+      if (resp.audioLink) {
+        var audio = new Audio(resp.audioLink);
+        audio.play();
+      }
+    } catch (error) {
+      console.log(`result.speak(): ${error.message}`);
     }
-    
-    if (resp.audioLink) {
-      var audio = new Audio(resp.audioLink);
-      audio.play();
-    }
-    // speak('Thứ tự ngồi: Long Thương Toàn Tín, người chia bài là Thương');
   }
 };
 
@@ -148,19 +148,20 @@ function removeName(name) {
   }
 }
 
-function arrangeRandomly() {
+async function arrangeRandomly() {
   sound.play();
   const interval = setInterval(() => {
     shuffleArray(names);
     renderNameTable();
   }, 850);
-  setTimeout(async () => {
-    result.lockResult();
-    await Promise.any([sleep(50), result.speak()]);
-    clearInterval(interval);
-    sound.pause();
-    renderNameTable(result.names);
-  }, 3000);
+  result.lockResult();
+  await Promise.any([
+    sleep(60),
+    Promise.all([result.speak(), sleep(10)]),
+  ]);
+  clearInterval(interval);
+  sound.pause();
+  renderNameTable(result.names);
 }
 
 function randomNumber(min, max) {
