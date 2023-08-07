@@ -45,6 +45,10 @@ var result = {
       if (!resp.audioLink && resp.requestId) {
         resp.audioLink = await get_audio_link(resp.requestId);
       }
+
+      if (!resp.audioLink) {
+        resp.audioLink = await get_audio_link(resp.requestId);
+      }
       
       if (resp.audioLink) {
         var audio = new Audio(resp.audioLink);
@@ -157,7 +161,7 @@ async function arrangeRandomly() {
   }, 850);
   result.lockResult();
   await Promise.any([
-    sleep(60),
+    sleep(120),
     Promise.all([result.speak(), sleep(10)]),
   ]);
   clearInterval(interval);
@@ -213,5 +217,8 @@ function get_audio_link(request_id) {
   .then(data => {
     console.log(data);
     return data?.audio_link;
-  });
+  })
+  .catch(() => {
+    return '';
+  })
 }
