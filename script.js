@@ -26,7 +26,8 @@ var result = {
     //   speak('Xin chúc mừng người chia bài là: ' + this.dealer );
     // }
     try {
-      const str = 'thứ tự chỗ ngồi game bài UNO là ' + this.names.map(x => x.name + x.attrs).join(', ') + '. Cho 1 thông báo ngắn gọn vị trí chỗ ngồi 1 cách hài hước và hấp dẫn';
+      // const str = 'thứ tự chỗ ngồi game bài UNO là ' + this.names.map(x => x.name + x.attrs).join(', ') + '. Cho 1 thông báo ngắn gọn vị trí chỗ ngồi 1 cách hài hước và hấp dẫn';
+      const str = 'Thứ tự chỗ ngồi game bài UNO hôm nay là ' + this.names.map(x => x.name).join(', ') + '. Cho 1 thông báo ngắn gọn vị trí chỗ ngồi theo phong cách hài hước và dự đoán ngẫu nhiên 1 người chiến thắng hôm nay';
       // send post request to https://appdev.spce.com/api/ai-talk/ with payload {text: str}
       let resp = await fetch('https://appdev.spce.com/api/ai-talk/', {
         method: 'POST',
