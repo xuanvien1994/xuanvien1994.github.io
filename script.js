@@ -1,19 +1,20 @@
 const names = [
-  { name: "Viên", rate: 0, attrs: ' (tính toán, lạc quan như pi thủ)' },
-  { name: "Toàn", rate: 0, attrs: ' (trùm UNO, đại gia, vui vẻ)' },
-  { name: "Quang", rate: 0, attrs: ' (chơi cho vui, cống hiến)' },
-  { name: "Ánh", rate: 0, attrs: ' (designer, thánh cãi ngang, hay giận)' },
-  { name: "Chương", rate: 0, attrs: ' (nói nhiều, thích đâm chọt)' },
-  { name: "Uyên", rate: 0, attrs: ' (tester, nhỏ nhất, ngáo ngơ)' },
-  { name: "Long", rate: 0, attrs: ' (vip)' },
-  { name: "Thương", rate: 0, attrs: ' (đẹp, vô hại, khó hiểu)' },
-  { name: "Tín", rate: 0, attrs: ' (bí ẩn, ít nói)' },
-  { name: "Hồng", rate: 0, attrs: ' (tester, thích ăn chay)' },
+  { name: "Viên", rate: 0, attrs: " (tính toán, lạc quan như pi thủ)" },
+  { name: "Toàn", rate: 0, attrs: " (trùm UNO, đại gia, vui vẻ)" },
+  { name: "Quang", rate: 0, attrs: " (chơi cho vui, cống hiến)" },
+  { name: "Ánh", rate: 0, attrs: " (designer, thánh cãi ngang, hay giận)" },
+  { name: "Chương", rate: 0, attrs: " (nói nhiều, thích đâm chọt)" },
+  { name: "Uyên", rate: 0, attrs: " (tester, nhỏ nhất, ngáo ngơ)" },
+  { name: "Long", rate: 0, attrs: " (vip)" },
+  { name: "Thương", rate: 0, attrs: " (đẹp, vô hại, khó hiểu)" },
+  { name: "Tín", rate: 0, attrs: " (bí ẩn, ít nói)" },
+  // { name: "Hồng", rate: 0, attrs: ' (tester, thích ăn chay)' },
+  { name: "Wilson", rate: 0, attrs: " (tester)" },
   // { name: "Minh", rate: 0 },
 ];
 
 var result = {
-  dealer: '',
+  dealer: "",
   names: [],
   lockResult: function () {
     this.names = [...names];
@@ -27,20 +28,23 @@ var result = {
     // }
     try {
       // const str = 'thứ tự chỗ ngồi game bài UNO là ' + this.names.map(x => x.name + x.attrs).join(', ') + '. Cho 1 thông báo ngắn gọn vị trí chỗ ngồi 1 cách hài hước và hấp dẫn';
-      const str = 'Thứ tự chỗ ngồi game bài UNO hôm nay là ' + this.names.map(x => x.name).join(', ') + '. Cho 1 thông báo ngắn gọn vị trí chỗ ngồi theo phong cách hài hước và dự đoán ngẫu nhiên 1 người chiến thắng hôm nay';
+      const str =
+        "Thứ tự chỗ ngồi game bài UNO hôm nay là " +
+        this.names.map((x) => x.name).join(", ") +
+        ". Cho 1 thông báo ngắn gọn vị trí chỗ ngồi theo phong cách hài hước và dự đoán ngẫu nhiên 1 người chiến thắng hôm nay";
       // send post request to https://appdev.spce.com/api/ai-talk/ with payload {text: str}
-      let resp = await fetch('https://appdev.spce.com/api/ai-talk/', {
-        method: 'POST',
-        body: JSON.stringify({question: str}),
+      let resp = await fetch("https://appdev.spce.com/api/ai-talk/", {
+        method: "POST",
+        body: JSON.stringify({ question: str }),
         headers: {
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json",
+        },
       })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        return {requestId: data?.request_id, audioLink: data?.audio_link};
-      });
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          return { requestId: data?.request_id, audioLink: data?.audio_link };
+        });
 
       if (!resp.audioLink && resp.requestId) {
         resp.audioLink = await get_audio_link(resp.requestId);
@@ -49,7 +53,7 @@ var result = {
       if (!resp.audioLink) {
         resp.audioLink = await get_audio_link(resp.requestId);
       }
-      
+
       if (resp.audioLink) {
         var audio = new Audio(resp.audioLink);
         audio.play();
@@ -57,7 +61,7 @@ var result = {
     } catch (error) {
       console.log(`result.speak(): ${error.message}`);
     }
-  }
+  },
 };
 
 let includeRateNumber = false;
@@ -160,10 +164,7 @@ async function arrangeRandomly() {
     renderNameTable();
   }, 850);
   result.lockResult();
-  await Promise.any([
-    sleep(120),
-    Promise.all([result.speak(), sleep(10)]),
-  ]);
+  await Promise.any([sleep(120), Promise.all([result.speak(), sleep(10)])]);
   clearInterval(interval);
   sound.pause();
   renderNameTable(result.names);
@@ -198,27 +199,29 @@ function addNameOnEnter(event) {
 }
 
 function speak(text) {
-	var msg = new SpeechSynthesisUtterance();
-	msg.text = text;
-	msg.volume = 1
-	msg.rate = 0.8;
-	msg.pitch = 1;
-	msg.voice = speechSynthesis.getVoices().filter(function(voice) { return voice.name == 'Linh'; })[0];
-	window.speechSynthesis.speak(msg);
+  var msg = new SpeechSynthesisUtterance();
+  msg.text = text;
+  msg.volume = 1;
+  msg.rate = 0.8;
+  msg.pitch = 1;
+  msg.voice = speechSynthesis.getVoices().filter(function (voice) {
+    return voice.name == "Linh";
+  })[0];
+  window.speechSynthesis.speak(msg);
 }
 
 function sleep(seconds) {
-  return new Promise(resolve => setTimeout(resolve, seconds * 1000));
+  return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 }
 
 function get_audio_link(request_id) {
-  return fetch('https://appdev.spce.com/api/ai-talk/audio/' + request_id)
-  .then(response => response.json())
-  .then(data => {
-    console.log(data);
-    return data?.audio_link;
-  })
-  .catch(() => {
-    return '';
-  })
+  return fetch("https://appdev.spce.com/api/ai-talk/audio/" + request_id)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      return data?.audio_link;
+    })
+    .catch(() => {
+      return "";
+    });
 }
